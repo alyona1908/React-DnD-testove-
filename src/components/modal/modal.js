@@ -16,11 +16,7 @@ function ModalWind() {
     const dispatch = useDispatch()
     const [lgShow, setLgShow] = useState(false);
     const [controlledBoard, setBoard] = useState(columns);
-    // const [value, setValue] = usrState('');
-    // console.log(value)
-    // const filteredColumns = columns.columns[0].cards.title.filter(() => {
-    //   columns.columns[0].cards.title.toLowerCase().includes(search.toLowerCase())
-    // })
+    const [value, setValue] = useState('');
 
     useEffect(() => {
         dispatch(getTable())
@@ -31,6 +27,14 @@ function ModalWind() {
             setBoard(columns)
         }
     },[columns])
+
+
+    let filteredColumns;
+    if (Object.keys(columns).length !== 0) {
+      filteredColumns = columns.columns[0].cards.filter((el) => {
+        el.title.toLowerCase().includes(value.toLowerCase())
+      })
+    }
 
     const ControlledBoard = () => {
   
@@ -73,16 +77,13 @@ function ModalWind() {
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            {/* <InputGroup size="sm" className="mb-3">
+            <InputGroup size="sm" className="mb-3">
               <FormControl
                 placeholder="Find coulumns..."
                 aria-label="Find coulumns"
-                // onChange={(event) => value.push(event.target.value)}
+                onChange={(event) => setValue(event.target.value)}
               />
-              <Button variant="outline-dark" id="button-addon2" onClick={setValue(filteredColumns)}>
-                Search
-              </Button>
-            </InputGroup> */}
+            </InputGroup>
             <ControlledBoard />
           </Modal.Body>
           <Modal.Footer>

@@ -4,6 +4,7 @@ import './table.css';
 import { useSelector, useDispatch } from 'react-redux';
 import {getTable, getTableData} from "../../store/actions/table"
 
+
 const TableParagraf = (prop) => {
     let thTitles = [];
     prop.colName.cards.forEach(element => {
