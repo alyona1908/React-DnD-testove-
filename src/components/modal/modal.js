@@ -29,27 +29,53 @@ function ModalWind() {
     },[columns])
 
 
-    let filteredColumns;
-    if (Object.keys(columns).length !== 0) {
-      filteredColumns = columns.columns[0].cards.filter((el) => {
-        el.title.toLowerCase().includes(value.toLowerCase())
-      })
-    }
+    // let filteredColumns;
+    // if (Object.keys(columns).length !== 0) {
+    //   filteredColumns = columns.columns[0].cards.filter((el) => {
+    //     el.title.toLowerCase().includes(value.toLowerCase())
+    //   })
+    // }
+    // const cols = columns && columns.columns && columns.columns[0] && columns.columns[0].cards;
+
+    // const filteredColumns = () => {
+    //   const cols = columns?.columns?.[0]?.cards;
+    //   return cols && cols.length !== 0 ? columns.columns[0].cards.filter((el) => {
+    //     return el.title.toLowerCase().includes(value.toLowerCase())
+    //   }) : [];
+    // }
 
     const ControlledBoard = () => {
-  
-        function handleCardMove(_card, source, destination) {
-          const updatedBoard = moveCard(controlledBoard, source, destination);
-          setBoard(updatedBoard);
-        }
+      function handleCardMove (_card, source, destination) {
+        const updatedBoard = moveCard(controlledBoard, source, destination);
+        setBoard(updatedBoard);
+      }
 
-        console.log("controlledBoard",controlledBoard)
-    
+      const filteredColumns = () => {
+        const cols = controlledBoard?.columns?.[0]?.cards;
+        return cols && cols.length !== 0 ? controlledBoard?.columns?.[0]?.cards.filter((el) => {
+          return el.title.toLowerCase().includes(value.toLowerCase())
+        }) : [];
+      }
+
+      // const cloned = JSON.parse(JSON.stringify(controlledBoard));
+      const nc = () => {
         return (
-          <Board onCardDragEnd={handleCardMove} disableColumnDrag>
-            {controlledBoard}
-          </Board>
-        );
+          {...controlledBoard, columns: [
+            ...controlledBoard.columns.map((item) => {
+              if (item.id === 1) {
+                item = {...item, cards: filteredColumns()}
+              }
+              return item;
+            })
+          ]}
+        )
+      }
+
+      return (
+        <Board onCardDragEnd={handleCardMove} disableColumnDrag>
+          {nc()}
+        </Board>
+      );
     }
 
     const onClickHandler = () => {
@@ -58,7 +84,7 @@ function ModalWind() {
         setLgShow(false)
     }
 
- 
+
 
     return (
       <>
@@ -79,9 +105,10 @@ function ModalWind() {
           <Modal.Body>
             <InputGroup size="sm" className="mb-3">
               <FormControl
-                placeholder="Find coulumns..."
-                aria-label="Find coulumns"
+                placeholder="Find columns..."
+                aria-label="Find columns"
                 onChange={(event) => setValue(event.target.value)}
+                value={value}
               />
             </InputGroup>
             <ControlledBoard />
